@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "me.wurgo.practiceseedmod.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "core.gui.CreateWorldScreenMixin",
+    "core.gui.GameMenuScreenMixin",
+
+    "core.MinecraftClientMixin",
+    "core.MinecraftServerMixin",
+    "core.ServerChunkManagerMixin",
+    "core.gui.TitleScreenMixin",
+
+    "mechanics.blocks.GravelBlockMixin",
+
+    "mechanics.entities.PiglinBrainMixin",
+
+    "mechanics.loot.UniformLootTableRangeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

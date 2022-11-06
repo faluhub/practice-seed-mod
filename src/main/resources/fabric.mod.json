@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "practiceseedmod",
+  "version": "${version}",
+  "name": "PracticeSeedMod",
+  "description": "EvanKae lol",
+  "authors": ["Wurgo"],
+  "contact": {
+    "homepage": "https://github.com/wurgo"
+  },
+  "license": "MIT",
+  "icon": "assets/practiceseedmod/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["me.wurgo.practiceseedmod.PracticeSeedMod"]
+  },
+  "mixins": ["practiceseedmod.mixins.json"],
+  "depends": {
+    "minecraft": "1.16.1",
+    "java": ">=16"
+  },
+  "breaks": {
+    "fast_reset": "*"
+  }
+}
