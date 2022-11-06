@@ -5,6 +5,8 @@ import com.google.gson.JsonParser;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.transports.WebSocket;
+import me.wurgo.practiceseedmod.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.config.ConfigWriter;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -22,7 +24,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.gen.GeneratorOptions;
 import net.minecraft.world.level.LevelInfo;
 import org.apache.logging.log4j.*;
-import org.jetbrains.annotations.Nullable;
 
 import java.net.URI;
 import java.util.*;
@@ -40,13 +41,6 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static final Object saveLock = new Object();
     public static Long currentSeed;
     public static Random barteringRandom;
-    public static Long[] barteringSeeds = new Long[] {
-            Long.parseLong("7064568383303603059"),
-            Long.parseLong("7310735715797688977"),
-            Long.parseLong("9068995232731620575"),
-            Long.parseLong("-5756924456702763701"),
-            Long.parseLong("-2488798226288537351")
-    };
 
     public static void log(Object msg) {
         LOGGER.log(Level.INFO, msg);
@@ -62,7 +56,12 @@ public class PracticeSeedMod implements ClientModInitializer {
 
     public static void playNextSeed(long l) {
         WorldConstants.reset();
-        barteringRandom = new Random(barteringSeeds[new Random().nextInt(barteringSeeds.length - 1)]);
+
+        ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
+        int limit = BarterSeedPresets.values().length - 1;
+        int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
+        BarterSeedPresets preset = List.of(BarterSeedPresets.values()).get(barterSeedPresetIndex);
+        barteringRandom = new Random(preset.seeds.get(new Random().nextInt(preset.seeds.size() - 1)));
 
         LevelInfo levelInfo = new LevelInfo(
                 "Practice Seed",

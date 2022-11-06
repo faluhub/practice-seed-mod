@@ -2,6 +2,8 @@ package me.wurgo.practiceseedmod.mixin.mechanics.blocks;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import me.wurgo.practiceseedmod.WorldConstants;
+import me.wurgo.practiceseedmod.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.config.ConfigWriter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.GravelBlock;
@@ -20,7 +22,7 @@ public abstract class GravelBlockMixin extends FallingBlock {
 
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        if (PracticeSeedMod.running && !WorldConstants.hasDroppedFlint) {
+        if (PracticeSeedMod.running && !WorldConstants.hasDroppedFlint && new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("firstTryFlint", true)) {
             WorldConstants.hasDroppedFlint = true;
             return List.of(new ItemStack(Items.FLINT));
         }

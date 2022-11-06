@@ -10,10 +10,13 @@ import net.minecraft.text.LiteralText;
 import java.util.UUID;
 
 public class LinkUUIDScreen extends Screen {
-    public LinkUUIDScreen() {
+    private final Screen parent;
+
+    public LinkUUIDScreen(Screen parent) {
         super(new LiteralText("Link UUID:"));
 
         PracticeSeedMod.uuid = UUID.randomUUID();
+        this.parent = parent;
     }
 
     @Override
@@ -54,5 +57,12 @@ public class LinkUUIDScreen extends Screen {
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 13, 16777215);
 
         super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    @Override
+    public void onClose() {
+        if (this.client != null) {
+            this.client.openScreen(this.parent);
+        }
     }
 }

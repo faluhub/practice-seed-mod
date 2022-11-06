@@ -26,7 +26,7 @@ public abstract class MinecraftClientMixin {
             )
     )
     private void otherScreen(MinecraftClient instance, Screen screen) {
-        instance.openScreen(new LinkUUIDScreen());
+        instance.openScreen(new LinkUUIDScreen(null));
     }
 
     @Inject(
