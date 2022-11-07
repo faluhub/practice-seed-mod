@@ -72,7 +72,7 @@ public class ModConfigScreen extends Screen {
                             wrapper.putBoolValue("guaranteeDrops", !guaranteeDrops);
                             b.setMessage(new LiteralText("Guarantee Drops: " + (guaranteeDrops ? "No" : "Yes")));
                         },
-                        (b, matrices, i, j) -> this.renderTooltip(matrices, this.client.textRenderer.wrapLines(new LiteralText("Guarantees mob dropslike Blaze Rods and Ender Pearls."), 150), i, j)
+                        (b, matrices, i, j) -> this.renderTooltip(matrices, this.client.textRenderer.wrapLines(new LiteralText("Guarantees mob drops like Blaze Rods and Ender Pearls."), 150), i, j)
                 )
         );
         boolean guaranteeDrops = wrapper.getBoolValue("guaranteeDrops", true);

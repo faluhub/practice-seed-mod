@@ -14,9 +14,8 @@
 
     "mechanics.blocks.GravelBlockMixin",
 
-    "mechanics.entities.PiglinBrainMixin",
-
-    "mechanics.loot.UniformLootTableRangeMixin"
+    "mechanics.entities.LivingEntityMixin",
+    "mechanics.entities.PiglinBrainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

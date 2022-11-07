@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '1.0-SNAPSHOT'
 	id 'maven-publish'
+	id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -18,12 +19,39 @@ repositories {
 	// for more information about repositories.
 }
 
+configurations {
+	modIncludeImplementation
+
+	implementation.extendsFrom shadow
+	include.extendsFrom modIncludeImplementation
+	modImplementation.extendsFrom modIncludeImplementation
+	implementation.extendsFrom shadow
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	implementation "io.socket:socket.io-client:2.1.0"
+	shadow "io.socket:socket.io-client:2.1.0"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	archiveClassifier.set("sources")
+	from sourceSets.main.allSource
+}
+
+shadowJar {
+	classifier "shadow"
+	configurations = [project.configurations.shadow]
+	remapJar {
+		dependsOn shadowJar
+		input.set shadowJar.archiveFile.get()
+	}
+	minimize()
 }
 
 processResources {
