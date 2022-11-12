@@ -5,17 +5,22 @@ import com.google.gson.JsonParser;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.transports.WebSocket;
+import me.wurgo.practiceseedmod.config.ConfigPresets;
 import me.wurgo.practiceseedmod.config.ConfigWrapper;
 import me.wurgo.practiceseedmod.config.ConfigWriter;
+import me.wurgo.practiceseedmod.random.RandomSeedGenerator;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ProgressScreen;
 import net.minecraft.client.gui.screen.SaveLevelScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.world.GeneratorType;
 import net.minecraft.resource.DataPackSettings;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.registry.RegistryTracker;
 import net.minecraft.world.Difficulty;
@@ -41,6 +46,7 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static final Object saveLock = new Object();
     public static Long currentSeed;
     public static Random barteringRandom;
+    public static Random blazeDropRandom;
 
     public static void log(Object msg) {
         LOGGER.log(Level.INFO, msg);
@@ -55,13 +61,30 @@ public class PracticeSeedMod implements ClientModInitializer {
     }
 
     public static void playNextSeed(long l) {
+        MinecraftClient client = MinecraftClient.getInstance();
+
         WorldConstants.reset();
 
         ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
-        int limit = BarterSeedPresets.values().length - 1;
-        int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
-        BarterSeedPresets preset = List.of(BarterSeedPresets.values()).get(barterSeedPresetIndex);
-        barteringRandom = new Random(preset.seeds.get(new Random().nextInt(preset.seeds.size() - 1)));
+
+        client.execute(() -> {
+            if (wrapper.getBoolValue("setBarterSeed", true)) {
+                client.method_29970(new SaveLevelScreen(new LiteralText("Initialising bartering seed")));
+                int limit = ConfigPresets.BarterSeedPresets.values().length - 1;
+                int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
+                ConfigPresets.BarterSeedPresets preset = List.of(ConfigPresets.BarterSeedPresets.values()).get(barterSeedPresetIndex);
+                barteringRandom = new Random(preset.seeds.get(new Random().nextInt(preset.seeds.size() - 1)));
+            }
+            if (wrapper.getBoolValue("guaranteeDrops", true)) {
+                client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze rod seed")));
+                int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
+                int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
+                if (kills == -1) {
+                    kills = rods + new Random().nextInt(6);
+                }
+                blazeDropRandom = new Random(new RandomSeedGenerator().getBlazeDropSeed(rods, kills));
+            }
+        });
 
         LevelInfo levelInfo = new LevelInfo(
                 "Practice Seed",
@@ -79,8 +102,6 @@ public class PracticeSeedMod implements ClientModInitializer {
                 true,
                 false
         );
-
-        MinecraftClient client = MinecraftClient.getInstance();
 
         client.execute(() -> {
             if (client.world != null) {
@@ -117,7 +138,7 @@ public class PracticeSeedMod implements ClientModInitializer {
                 .setTransports(new String[] {WebSocket.NAME})
                 .build();
 
-        SOCKET = IO.socket(URI.create("http://localhost:3001"), options);
+        SOCKET = IO.socket(URI.create("https://salty-wave-05504.herokuapp.com/"), options);
         SOCKET.connect();
         SOCKET.on("play-seed", args1 -> {
             JsonParser parser = new JsonParser();

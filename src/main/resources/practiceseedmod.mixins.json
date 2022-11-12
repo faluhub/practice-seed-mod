@@ -14,7 +14,8 @@
 
     "mechanics.blocks.GravelBlockMixin",
 
-    "mechanics.entities.LivingEntityMixin",
+    "mechanics.entities.BlazeEntityMixin",
+    "mechanics.entities.EndermanEntityMixin",
     "mechanics.entities.PiglinBrainMixin"
   ],
   "injectors": {
