@@ -10,12 +10,6 @@ public class ConfigWrapper {
         this.writer = writer;
     }
 
-    public boolean valueExists(String key) {
-        JsonObject config = this.writer.get();
-        JsonElement element = config.get(key);
-        return element != null;
-    }
-
     public void putBoolValue(String key, boolean value) {
         JsonObject config = this.writer.get();
         config.addProperty(key, value);

@@ -49,10 +49,7 @@ public abstract class TitleScreenMixin extends Screen {
         }
 
         PracticeSeedMod.currentSeed = null;
-        if (PracticeSeedMod.playNextSeed()) {
-            ci.cancel();
-        } else {
-            PracticeSeedMod.running = false;
-        }
+        if (PracticeSeedMod.playNextSeed()) { ci.cancel(); }
+        else { PracticeSeedMod.running = false; }
     }
 }

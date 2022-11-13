@@ -5,23 +5,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.SemanticVersion;
-import net.fabricmc.loader.api.VersionParsingException;
 import net.fabricmc.loader.api.metadata.version.VersionPredicate;
 import org.apache.commons.io.FileUtils;
-import org.spongepowered.include.com.google.common.collect.Lists;
 
 import java.io.File;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class UpdateChecker {
     public static String LATEST_VERSION = null;
@@ -81,7 +74,7 @@ public class UpdateChecker {
                 }
             }
 
-            PracticeSeedMod.log("Done with checking new releases.");
+            PracticeSeedMod.log("Done checking for new releases.");
         } catch (Exception e) {
             e.printStackTrace();
         }
