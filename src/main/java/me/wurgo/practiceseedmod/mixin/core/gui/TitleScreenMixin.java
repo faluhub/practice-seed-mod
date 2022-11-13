@@ -1,7 +1,9 @@
 package me.wurgo.practiceseedmod.mixin.core.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
+import me.wurgo.practiceseedmod.gui.DownloadUpdateScreen;
 import me.wurgo.practiceseedmod.gui.ModConfigScreen;
+import me.wurgo.practiceseedmod.updater.UpdateChecker;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -40,6 +42,12 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void playNextSeed(CallbackInfo ci) {
+        if (UpdateChecker.LATEST_DOWNLOAD_URL != null && !DownloadUpdateScreen.CHECKED && this.client != null) {
+            this.client.openScreen(new DownloadUpdateScreen());
+            ci.cancel();
+            return;
+        }
+
         PracticeSeedMod.currentSeed = null;
         if (PracticeSeedMod.playNextSeed()) {
             ci.cancel();
