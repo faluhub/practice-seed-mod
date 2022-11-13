@@ -24,7 +24,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class UpdateChecker {
-
     public static String LATEST_VERSION = null;
     public static String LATEST_DOWNLOAD_URL = null;
     public static String LATEST_DOWNLOAD_NAME = null;
@@ -82,7 +81,7 @@ public class UpdateChecker {
                 }
             }
 
-            PracticeSeedMod.LOGGER.info("Done with checking new releases");
+            PracticeSeedMod.log("Done with checking new releases.");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,11 +89,7 @@ public class UpdateChecker {
 
     public static void downloadUrl(String name, String url) {
         File destinationFile = FabricLoader.getInstance().getGameDir().resolve("mods").resolve(name).toFile();
-
-        try {
-            FileUtils.copyURLToFile(new URL(url), destinationFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        try { FileUtils.copyURLToFile(new URL(url), destinationFile); }
+        catch (Exception e) { e.printStackTrace(); }
     }
 }
