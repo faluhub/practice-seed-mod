@@ -68,14 +68,14 @@ public class PracticeSeedMod implements ClientModInitializer {
 
         client.execute(() -> {
             if (wrapper.getBoolValue("setBarterSeed", true)) {
-                client.method_29970(new SaveLevelScreen(new LiteralText("Initialising bartering seed")));
+                client.method_29970(new SaveLevelScreen(new LiteralText("Initialising barter seed")));
                 int limit = ConfigPresets.BarterSeedPresets.values().length - 1;
                 int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
                 ConfigPresets.BarterSeedPresets preset = List.of(ConfigPresets.BarterSeedPresets.values()).get(barterSeedPresetIndex);
                 barteringRandom = new Random(preset.seeds.get(new Random().nextInt(preset.seeds.size() - 1)));
             }
             if (wrapper.getBoolValue("guaranteeDrops", true)) {
-                client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze rod seed")));
+                client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze drop seed")));
                 int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
                 int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
                 if (kills == -1) {
