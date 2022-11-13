@@ -9,6 +9,7 @@ import me.wurgo.practiceseedmod.config.ConfigPresets;
 import me.wurgo.practiceseedmod.config.ConfigWrapper;
 import me.wurgo.practiceseedmod.config.ConfigWriter;
 import me.wurgo.practiceseedmod.random.RandomSeedGenerator;
+import me.wurgo.practiceseedmod.updater.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -133,6 +134,7 @@ public class PracticeSeedMod implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         WorldConstants.reset();
+        UpdateChecker.check();
 
         IO.Options options = IO.Options.builder()
                 .setTransports(new String[] {WebSocket.NAME})
