@@ -3,6 +3,7 @@ package me.wurgo.practiceseedmod.mixin.core.gui;
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
+import net.minecraft.client.gui.screen.options.OptionsScreen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.realms.RealmsBridge;
@@ -40,6 +41,49 @@ public abstract class GameMenuScreenMixin extends Screen {
                 this.client.openScreen(new MultiplayerScreen(new TitleScreen()));
             }
         }
+    }
+
+    @Redirect(
+            method = "initWidgets",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;addButton(Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)Lnet/minecraft/client/gui/widget/AbstractButtonWidget;",
+                    ordinal = 5
+            )
+    )
+    private AbstractButtonWidget widenOptionsButton(GameMenuScreen instance, AbstractButtonWidget abstractButtonWidget) {
+        if (PracticeSeedMod.running) {
+            return this.addButton(
+                    new ButtonWidget(
+                            abstractButtonWidget.x,
+                            abstractButtonWidget.y,
+                            204,
+                            abstractButtonWidget.getHeight(),
+                            abstractButtonWidget.getMessage(),
+                            b -> {
+                                if (this.client != null) {
+                                    this.client.openScreen(new OptionsScreen((GameMenuScreen) (Object) this, this.client.options));
+                                }
+                            }
+                    )
+            );
+        }
+        return this.addButton(abstractButtonWidget);
+    }
+
+    @Redirect(
+            method = "initWidgets",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;addButton(Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)Lnet/minecraft/client/gui/widget/AbstractButtonWidget;",
+                    ordinal = 6
+            )
+    )
+    private AbstractButtonWidget removeOpenToLan(GameMenuScreen instance, AbstractButtonWidget abstractButtonWidget) {
+        if (PracticeSeedMod.running) {
+            return this.addButton(new ButtonWidget(-100, -100, 0, 0, new LiteralText(""), b -> {}));
+        }
+        return this.addButton(abstractButtonWidget);
     }
 
     @Redirect(
