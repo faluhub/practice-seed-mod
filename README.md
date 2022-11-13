@@ -1,1 +1,1 @@
-# Invite: [K4CPCTtAku](https://discord.gg/K4CPCTtAku)
+# Invite: [pV2kYMjDDV](https://discord.gg/pV2kYMjDDV)
