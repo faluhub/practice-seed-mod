@@ -1,21 +1,26 @@
-package me.wurgo.practiceseedmod.mixin.core.gui;
+package me.wurgo.practiceseedmod.mixin.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.*;
 import net.minecraft.client.gui.screen.multiplayer.MultiplayerScreen;
-import net.minecraft.client.gui.screen.options.OptionsScreen;
 import net.minecraft.client.gui.widget.AbstractButtonWidget;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.realms.RealmsBridge;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameMenuScreen.class)
 public abstract class GameMenuScreenMixin extends Screen {
+    private ButtonWidget nextSeedButton;
+
     protected GameMenuScreenMixin(Text title) {
         super(title);
     }
@@ -47,43 +52,11 @@ public abstract class GameMenuScreenMixin extends Screen {
             method = "initWidgets",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;addButton(Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)Lnet/minecraft/client/gui/widget/AbstractButtonWidget;",
-                    ordinal = 5
+                    target = "Lnet/minecraft/client/MinecraftClient;isIntegratedServerRunning()Z"
             )
     )
-    private AbstractButtonWidget widenOptionsButton(GameMenuScreen instance, AbstractButtonWidget abstractButtonWidget) {
-        if (PracticeSeedMod.running) {
-            return this.addButton(
-                    new ButtonWidget(
-                            abstractButtonWidget.x,
-                            abstractButtonWidget.y,
-                            204,
-                            abstractButtonWidget.getHeight(),
-                            abstractButtonWidget.getMessage(),
-                            b -> {
-                                if (this.client != null) {
-                                    this.client.openScreen(new OptionsScreen((GameMenuScreen) (Object) this, this.client.options));
-                                }
-                            }
-                    )
-            );
-        }
-        return this.addButton(abstractButtonWidget);
-    }
-
-    @Redirect(
-            method = "initWidgets",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/screen/GameMenuScreen;addButton(Lnet/minecraft/client/gui/widget/AbstractButtonWidget;)Lnet/minecraft/client/gui/widget/AbstractButtonWidget;",
-                    ordinal = 6
-            )
-    )
-    private AbstractButtonWidget removeOpenToLan(GameMenuScreen instance, AbstractButtonWidget abstractButtonWidget) {
-        if (PracticeSeedMod.running) {
-            return this.addButton(new ButtonWidget(-100, -100, 0, 0, new LiteralText(""), b -> {}));
-        }
-        return this.addButton(abstractButtonWidget);
+    private boolean disableOpenToLan(MinecraftClient instance) {
+        return instance.isIntegratedServerRunning() && !PracticeSeedMod.running;
     }
 
     @Redirect(
@@ -99,12 +72,22 @@ public abstract class GameMenuScreenMixin extends Screen {
         int i = -16;
 
         if (PracticeSeedMod.running) {
-            ButtonWidget bw = this.addButton(new ButtonWidget(this.width / 2 - 102, this.height / 4 + 120 + i, 68 - 4, 20, new TranslatableText("Save & Quit"), buttonWidget -> {
-                buttonWidget.active = false;
-                PracticeSeedMod.running = false;
-                this.quit();
-            }));
-            ButtonWidget buttonWidget23 = this.addButton(
+            ButtonWidget bw = this.addButton(
+                    new ButtonWidget(
+                            this.width / 2 - 102,
+                            this.height / 4 + 120 + i,
+                            68 - 4,
+                            20,
+                            new TranslatableText("Save & Quit"),
+                            b -> {
+                                b.active = false;
+                                PracticeSeedMod.running = false;
+                                PracticeSeedMod.queue.clear();
+                                this.quit();
+                            }
+                    )
+            );
+            this.nextSeedButton = this.addButton(
                     new ButtonWidget(
                             this.width / 2 - 102 + 68,
                             this.height / 4 + 120 + i,
@@ -117,7 +100,7 @@ public abstract class GameMenuScreenMixin extends Screen {
                             }
                     )
             );
-            buttonWidget23.active = PracticeSeedMod.queue.size() > 0;
+            this.nextSeedButton.active = PracticeSeedMod.queue.size() > 0;
             ButtonWidget buttonWidget24 = this.addButton(
                     new ButtonWidget(
                             this.width / 2 - 102 + 68 * 2 + 4,
@@ -155,4 +138,11 @@ public abstract class GameMenuScreenMixin extends Screen {
             )
     )
     private void cancelLabelChange(ButtonWidget instance, Text text) {}
+
+    @Inject(method = "render", at = @At("TAIL"))
+    private void updateActiveButtons(MatrixStack matrices, int mouseX, int mouseY, float delta, CallbackInfo ci) {
+        if (this.nextSeedButton != null) {
+            this.nextSeedButton.active = PracticeSeedMod.queue.size() > 0;
+        }
+    }
 }

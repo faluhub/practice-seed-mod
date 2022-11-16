@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.config;
+package me.wurgo.practiceseedmod.core.config;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

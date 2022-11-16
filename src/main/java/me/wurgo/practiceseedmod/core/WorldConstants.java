@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod;
+package me.wurgo.practiceseedmod.core;
 
 import java.lang.reflect.Field;
 

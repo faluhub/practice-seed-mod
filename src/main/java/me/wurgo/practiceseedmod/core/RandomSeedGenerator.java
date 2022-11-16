@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.random;
+package me.wurgo.practiceseedmod.core;
 
 import java.util.Random;
 

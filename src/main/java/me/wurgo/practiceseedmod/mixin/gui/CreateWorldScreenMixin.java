@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.mixin.core.gui;
+package me.wurgo.practiceseedmod.mixin.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;

@@ -1,8 +1,8 @@
 package me.wurgo.practiceseedmod.mixin.mechanics.entities;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
-import me.wurgo.practiceseedmod.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.config.ConfigWriter;
+import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.EndermanEntity;

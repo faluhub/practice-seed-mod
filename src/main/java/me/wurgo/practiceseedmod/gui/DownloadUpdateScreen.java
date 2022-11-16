@@ -1,12 +1,13 @@
 package me.wurgo.practiceseedmod.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
-import me.wurgo.practiceseedmod.updater.UpdateChecker;
+import me.wurgo.practiceseedmod.core.UpdateChecker;
 import net.minecraft.client.gui.hud.BackgroundHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
 
 public class DownloadUpdateScreen extends Screen {
@@ -18,7 +19,7 @@ public class DownloadUpdateScreen extends Screen {
     private ButtonWidget downloadButton;
 
     public DownloadUpdateScreen() {
-        super(Text.method_30163(PracticeSeedMod.MOD_CONTAINER.getMetadata().getName() + " Update Checker"));
+        super(new LiteralText(PracticeSeedMod.MOD_CONTAINER.getMetadata().getName() + " Update Checker"));
         DownloadUpdateScreen.CHECKED = true;
     }
 

@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.config;
+package me.wurgo.practiceseedmod.core.config;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonNull;

@@ -1,9 +1,9 @@
 package me.wurgo.practiceseedmod.mixin.mechanics.blocks;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
-import me.wurgo.practiceseedmod.WorldConstants;
-import me.wurgo.practiceseedmod.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.config.ConfigWriter;
+import me.wurgo.practiceseedmod.core.WorldConstants;
+import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.GravelBlock;

@@ -1,8 +1,8 @@
 package me.wurgo.practiceseedmod.gui;
 
-import me.wurgo.practiceseedmod.config.ConfigPresets;
-import me.wurgo.practiceseedmod.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.config.ConfigWriter;
+import me.wurgo.practiceseedmod.core.config.ConfigPresets;
+import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;

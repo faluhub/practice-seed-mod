@@ -1,15 +1,17 @@
 package me.wurgo.practiceseedmod;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.engineio.client.transports.WebSocket;
-import me.wurgo.practiceseedmod.config.ConfigPresets;
-import me.wurgo.practiceseedmod.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.config.ConfigWriter;
-import me.wurgo.practiceseedmod.random.RandomSeedGenerator;
-import me.wurgo.practiceseedmod.updater.UpdateChecker;
+import me.wurgo.practiceseedmod.core.WorldConstants;
+import me.wurgo.practiceseedmod.core.config.ConfigPresets;
+import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
+import me.wurgo.practiceseedmod.core.config.ConfigWriter;
+import me.wurgo.practiceseedmod.core.RandomSeedGenerator;
+import me.wurgo.practiceseedmod.core.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
@@ -44,6 +46,7 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static List<Long> queue = new ArrayList<>();
     public static final Object saveLock = new Object();
     public static Long currentSeed;
+    public static String seedNotes;
     public static Random barteringRandom;
     public static Random blazeDropRandom;
 
@@ -52,7 +55,7 @@ public class PracticeSeedMod implements ClientModInitializer {
     }
 
     public static boolean playNextSeed() {
-        if (!queue.isEmpty()) {
+        if (!queue.isEmpty() && running) {
             playNextSeed(queue.get(0));
             return true;
         }
@@ -149,7 +152,15 @@ public class PracticeSeedMod implements ClientModInitializer {
                     long l = Long.parseLong(args.get(1).getAsString());
                     queue.add(l);
 
-                    if (!running && !MinecraftClient.getInstance().isInSingleplayer()) { playNextSeed(); }
+                    JsonElement notesElement = args.get(2);
+                    if (notesElement != null && !notesElement.isJsonNull()) {
+                        seedNotes = notesElement.getAsString();
+                    }
+
+                    if (!running && !MinecraftClient.getInstance().isInSingleplayer()) {
+                        running = true;
+                        playNextSeed();
+                    }
                 } catch (NumberFormatException ignored) {
                     log("Invalid seed!");
                 }

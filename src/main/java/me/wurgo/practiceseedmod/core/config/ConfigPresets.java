@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.config;
+package me.wurgo.practiceseedmod.core.config;
 
 import java.util.ArrayList;
 import java.util.List;

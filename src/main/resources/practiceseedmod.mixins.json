@@ -4,13 +4,14 @@
   "package": "me.wurgo.practiceseedmod.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
-    "core.gui.CreateWorldScreenMixin",
-    "core.gui.GameMenuScreenMixin",
+    "gui.CreateWorldScreenMixin",
+    "gui.GameMenuScreenMixin",
 
+    "core.CommandManagerMixin",
     "core.MinecraftClientMixin",
     "core.MinecraftServerMixin",
     "core.ServerChunkManagerMixin",
-    "core.gui.TitleScreenMixin",
+    "gui.TitleScreenMixin",
 
     "mechanics.blocks.GravelBlockMixin",
 
