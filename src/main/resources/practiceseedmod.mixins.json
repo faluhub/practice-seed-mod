@@ -5,13 +5,14 @@
   "compatibilityLevel": "JAVA_16",
   "client": [
     "gui.CreateWorldScreenMixin",
+    "gui.DebugHudMixin",
     "gui.GameMenuScreenMixin",
+    "gui.TitleScreenMixin",
 
     "core.CommandManagerMixin",
     "core.MinecraftClientMixin",
     "core.MinecraftServerMixin",
     "core.ServerChunkManagerMixin",
-    "gui.TitleScreenMixin",
 
     "mechanics.blocks.GravelBlockMixin",
 

@@ -4,6 +4,7 @@ import me.wurgo.practiceseedmod.PracticeSeedMod;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
 
@@ -11,6 +12,10 @@ import java.util.UUID;
 
 public class LinkUUIDScreen extends Screen {
     private final Screen parent;
+    private boolean hasCopied = false;
+    private boolean hasTyped = false;
+    private ButtonWidget copyButton;
+    private TextFieldWidget passwordField;
 
     public LinkUUIDScreen(Screen parent) {
         super(new LiteralText("Link UUID:"));
@@ -26,29 +31,38 @@ public class LinkUUIDScreen extends Screen {
 
     @Override
     protected void init() {
-        int buttonWidth = 100;
+        int buttonWidth = 150;
 
-        this.addButton(
+        this.copyButton = this.addButton(
                 new ButtonWidget(
                         this.width / 2 - buttonWidth / 2,
-                        this.height / 2,
+                        this.height / 2 + 25,
                         buttonWidth,
                         20,
                         new LiteralText("Copy UUID"),
                         b -> {
                             if (this.client != null) {
-                                if (b.getMessage().getString().equals("Copy UUID")) {
+                                if (!this.hasCopied && !this.hasTyped) {
                                     this.client.keyboard.setClipboard(PracticeSeedMod.uuid.toString());
-                                    b.setMessage(ScreenTexts.DONE);
+                                    this.hasCopied = true;
                                 } else {
-                                    this.client.openScreen(null);
+                                    this.onClose();
                                 }
                             }
                         }
                 )
         );
 
-        super.init();
+        this.passwordField = new TextFieldWidget(
+                this.textRenderer,
+                this.width / 2 - buttonWidth / 2,
+                this.height / 2,
+                buttonWidth,
+                20,
+                new LiteralText("")
+        );
+        this.passwordField.setMaxLength(50);
+        this.addChild(this.passwordField);
     }
 
     @Override
@@ -56,11 +70,40 @@ public class LinkUUIDScreen extends Screen {
         this.renderBackground(matrices);
         this.drawCenteredText(matrices, this.textRenderer, this.title, this.width / 2, 13, 16777215);
 
+        this.drawCenteredString(
+                matrices,
+                this.textRenderer,
+                "Race Password (Optional)",
+                this.width / 2,
+                this.height / 2 - 15,
+                16777215
+        );
+
+        this.copyButton.setMessage(this.hasCopied || this.hasTyped ? ScreenTexts.DONE : new LiteralText("Copy UUID"));
+        this.hasTyped = this.passwordField.getText().length() > 0;
+        this.passwordField.setEditable(!this.hasCopied);
+        if (this.passwordField.isFocused() && this.hasCopied) {
+            this.passwordField.setSelected(false);
+        }
+
+        this.passwordField.render(matrices, mouseX, mouseY, delta);
+
         super.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override
     public void onClose() {
+        if (this.hasTyped) {
+            PracticeSeedMod.isRace = true;
+            PracticeSeedMod.racePassword = this.passwordField.getText();
+            PracticeSeedMod.uuid = null;
+            PracticeSeedMod.log("Linked Multiplayer: " + PracticeSeedMod.racePassword);
+        } else {
+            PracticeSeedMod.isRace = false;
+            PracticeSeedMod.racePassword = null;
+            PracticeSeedMod.log("Linked UUID: " + PracticeSeedMod.uuid);
+        }
+
         if (this.client != null) {
             this.client.openScreen(this.parent);
         }

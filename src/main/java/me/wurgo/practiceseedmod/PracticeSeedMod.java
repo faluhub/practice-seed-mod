@@ -49,6 +49,9 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static String seedNotes;
     public static Random barteringRandom;
     public static Random blazeDropRandom;
+    public static boolean isRace;
+    public static String racePassword;
+    public static String raceHost;
 
     public static void log(Object msg) {
         LOGGER.log(Level.INFO, msg);
@@ -93,7 +96,7 @@ public class PracticeSeedMod implements ClientModInitializer {
                 GameMode.SURVIVAL,
                 false,
                 Difficulty.EASY,
-                true,
+                !isRace,
                 new GameRules(),
                 DataPackSettings.SAFE_MODE
         );
@@ -147,10 +150,12 @@ public class PracticeSeedMod implements ClientModInitializer {
             JsonParser parser = new JsonParser();
             JsonArray args = parser.parse(Arrays.toString(args1)).getAsJsonArray().get(0).getAsJsonArray();
 
-            if (args.get(0).getAsString().equals(uuid.toString())) {
+            if (uuid != null && args.get(0).getAsString().equals(uuid.toString())) {
                 try {
                     long l = Long.parseLong(args.get(1).getAsString());
-                    queue.add(l);
+                    if (!(running && isRace)) {
+                        queue.add(l);
+                    }
 
                     JsonElement notesElement = args.get(2);
                     if (notesElement != null && !notesElement.isJsonNull()) {
@@ -163,6 +168,29 @@ public class PracticeSeedMod implements ClientModInitializer {
                     }
                 } catch (NumberFormatException ignored) {
                     log("Invalid seed!");
+                } catch(IndexOutOfBoundsException ignored) {
+                    log("Invalid request received!");
+                }
+            }
+        });
+        SOCKET.on("race-seed", args1 -> {
+            JsonParser parser = new JsonParser();
+            JsonArray args = parser.parse(Arrays.toString(args1)).getAsJsonArray().get(0).getAsJsonArray();
+
+            if (args.get(0).getAsString().equals(racePassword) && isRace) {
+                try {
+                    queue.clear();
+                    long l = Long.parseLong(args.get(1).getAsString());
+                    queue.add(l);
+
+                    raceHost = args.get(2).getAsString();
+
+                    running = true;
+                    playNextSeed();
+                } catch (NumberFormatException ignored) {
+                    log("Invalid seed!");
+                } catch (IndexOutOfBoundsException ignored) {
+                    log("Invalid request received!");
                 }
             }
         });

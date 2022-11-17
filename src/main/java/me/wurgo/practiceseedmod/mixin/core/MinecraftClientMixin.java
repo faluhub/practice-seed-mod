@@ -1,11 +1,14 @@
 package me.wurgo.practiceseedmod.mixin.core;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
+import me.wurgo.practiceseedmod.core.UpdateChecker;
+import me.wurgo.practiceseedmod.gui.DownloadUpdateScreen;
 import me.wurgo.practiceseedmod.gui.LinkUUIDScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.SaveLevelScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,6 +29,10 @@ public abstract class MinecraftClientMixin {
             )
     )
     private void otherScreen(MinecraftClient instance, Screen screen) {
+        if (UpdateChecker.LATEST_DOWNLOAD_URL != null && !DownloadUpdateScreen.CHECKED) {
+            instance.openScreen(new DownloadUpdateScreen());
+            return;
+        }
         instance.openScreen(new LinkUUIDScreen(null));
     }
 

@@ -22,7 +22,7 @@ public abstract class GravelBlockMixin extends FallingBlock {
 
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        if (PracticeSeedMod.running && !WorldConstants.hasDroppedFlint && new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("firstTryFlint", true)) {
+        if (!WorldConstants.hasDroppedFlint && new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("firstTryFlint", true)) {
             WorldConstants.hasDroppedFlint = true;
             return List.of(new ItemStack(Items.FLINT));
         }

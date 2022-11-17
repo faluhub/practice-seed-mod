@@ -42,12 +42,6 @@ public abstract class TitleScreenMixin extends Screen {
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void playNextSeed(CallbackInfo ci) {
-        if (UpdateChecker.LATEST_DOWNLOAD_URL != null && !DownloadUpdateScreen.CHECKED && this.client != null) {
-            this.client.openScreen(new DownloadUpdateScreen());
-            ci.cancel();
-            return;
-        }
-
         PracticeSeedMod.currentSeed = null;
         if (PracticeSeedMod.playNextSeed()) { ci.cancel(); }
         else { PracticeSeedMod.running = false; }

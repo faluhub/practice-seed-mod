@@ -33,7 +33,7 @@ public abstract class BlazeEntityMixin extends HostileEntity {
     protected void dropLoot(DamageSource source, boolean causedByPlayer) {
         if (this.world.getServer() == null) { return; }
 
-        if (PracticeSeedMod.running && new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("guaranteeDrops", true)) {
+        if (new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("guaranteeDrops", true)) {
             Identifier identifier = this.getLootTable();
             LootTable lootTable = this.world.getServer().getLootManager().getTable(identifier);
             LootContext.Builder builder = this.getLootContextBuilder(causedByPlayer, source);

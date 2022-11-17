@@ -71,7 +71,7 @@ public class DownloadUpdateScreen extends Screen {
             String modVersion = PracticeSeedMod.MOD_CONTAINER.getMetadata().getVersion().getFriendlyString();
 
             this.drawCenteredString(matrices, this.textRenderer, "New Update for " + PracticeSeedMod.MOD_CONTAINER.getMetadata().getName() + " has been found!", width / 2, height / 2 - 20, whiteColor);
-            this.drawCenteredString(matrices, this.textRenderer, String.format("Do you want to download it? (Current : %s, Latest : %s)", modVersion.split("\\+")[0], UpdateChecker.LATEST_VERSION), width / 2, height / 2 - 9, whiteColor);
+            this.drawCenteredString(matrices, this.textRenderer, String.format("Do you want to download it? (Current: %s, Latest: %s)", modVersion.split("\\+")[0], UpdateChecker.LATEST_VERSION), width / 2, height / 2 - 9, whiteColor);
         } else if (currentStatus == Status.DOWNLOADING) {
             this.drawCenteredString(matrices, this.textRenderer, String.format("Downloading '%s'...", UpdateChecker.LATEST_DOWNLOAD_NAME), width / 2, height / 2 - 20, whiteColor);
         } else if (currentStatus == Status.DONE) {
