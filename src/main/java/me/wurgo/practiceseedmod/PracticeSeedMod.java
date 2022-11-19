@@ -40,6 +40,7 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static final String LOGGER_NAME = MOD_CONTAINER.getMetadata().getName();
     public static Logger LOGGER = LogManager.getLogger(LOGGER_NAME);
     public static Socket SOCKET;
+    public static URI SOCKET_URI = URI.create("https://salty-wave-05504.herokuapp.com/");
     public static UUID uuid;
     public static boolean running = false;
     public static final AtomicBoolean saving = new AtomicBoolean(false);
@@ -85,7 +86,7 @@ public class PracticeSeedMod implements ClientModInitializer {
                 int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
                 int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
                 if (kills == -1) {
-                    kills = rods + new Random().nextInt(6);
+                    kills = rods + new Random(l).nextInt(6);
                 }
                 blazeDropRandom = new Random(new RandomSeedGenerator().getBlazeDropSeed(rods, kills));
             }
@@ -144,7 +145,7 @@ public class PracticeSeedMod implements ClientModInitializer {
                 .setTransports(new String[] {WebSocket.NAME})
                 .build();
 
-        SOCKET = IO.socket(URI.create("https://salty-wave-05504.herokuapp.com/"), options);
+        SOCKET = IO.socket(SOCKET_URI, options);
         SOCKET.connect();
         SOCKET.on("play-seed", args1 -> {
             JsonParser parser = new JsonParser();
