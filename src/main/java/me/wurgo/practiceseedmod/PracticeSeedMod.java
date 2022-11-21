@@ -18,7 +18,6 @@ import net.fabricmc.loader.api.ModContainer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.SaveLevelScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.world.GeneratorType;
 import net.minecraft.resource.DataPackSettings;
@@ -62,6 +61,8 @@ public class PracticeSeedMod implements ClientModInitializer {
     }
 
     public static void initialiseLevelData(long l) {
+        WorldConstants.reset();
+
         MinecraftClient client = MinecraftClient.getInstance();
         ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
 
@@ -102,8 +103,6 @@ public class PracticeSeedMod implements ClientModInitializer {
 
     public static void playNextSeed(long l) {
         MinecraftClient client = MinecraftClient.getInstance();
-
-        WorldConstants.reset();
 
         LevelInfo levelInfo = new LevelInfo(
                 "Practice Seed",
