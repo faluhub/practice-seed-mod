@@ -2,6 +2,8 @@ package me.wurgo.practiceseedmod.mixin.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
+import net.minecraft.client.gui.screen.world.MoreOptionsDialog;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,10 +14,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class CreateWorldScreenMixin {
     @Shadow protected abstract void createLevel();
 
+    @Shadow @Final public MoreOptionsDialog moreOptionsDialog;
+
+    @Shadow public boolean hardcore;
+
     @Inject(method = "tick", at = @At("TAIL"))
     private void autoCreate(CallbackInfo ci) {
         if (PracticeSeedMod.running) {
             this.createLevel();
         }
+    }
+
+    @Inject(method = "createLevel", at = @At("TAIL"))
+    private void initLevelData(CallbackInfo ci) {
+        PracticeSeedMod.initialiseLevelData(moreOptionsDialog.getGeneratorOptions(this.hardcore).getSeed());
     }
 }

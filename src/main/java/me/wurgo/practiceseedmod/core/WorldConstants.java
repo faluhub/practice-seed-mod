@@ -1,9 +1,12 @@
 package me.wurgo.practiceseedmod.core;
 
 import java.lang.reflect.Field;
+import java.time.Instant;
 
 public class WorldConstants {
     public static boolean hasDroppedFlint = false;
+    public static boolean hasPerched = false;
+    public static Instant endEnterTimestamp;
 
     public static void reset() {
         for (Field field : WorldConstants.class.getDeclaredFields()) {
@@ -12,6 +15,9 @@ public class WorldConstants {
                 catch (IllegalAccessException ignored) {}
             } else if (field.getType().equals(int.class) || field.getType().equals(Integer.class)) {
                 try { field.setInt(WorldConstants.class, 0); }
+                catch (IllegalAccessException ignored) {}
+            } else {
+                try { field.set(WorldConstants.class, null); }
                 catch (IllegalAccessException ignored) {}
             }
         }

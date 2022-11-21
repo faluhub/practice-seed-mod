@@ -1,5 +1,7 @@
 package me.wurgo.practiceseedmod.core.config;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,17 +41,54 @@ public class ConfigPresets {
                 "7769790928494411656",
                 "5181066584369975135",
                 "-8104579087841319926"
-        });
+        }),
+        VANILLA("Vanilla", null);
 
-        public final String cosmeticName;
-        public final List<Long> seeds;
+        private final String cosmeticName;
+        private final @Nullable List<Long> seeds;
 
-        BarterSeedPresets(String cosmeticName, String[] seeds) {
+        BarterSeedPresets(String cosmeticName, @Nullable String[] seeds) {
             this.cosmeticName = cosmeticName;
             this.seeds = new ArrayList<>();
-            for (String seed : seeds) {
-                this.seeds.add(Long.parseLong(seed));
+            if (seeds != null) {
+                for (String seed : seeds) {
+                    if (seed != null) {
+                        this.seeds.add(Long.parseLong(seed));
+                    }
+                }
             }
+        }
+
+        public String getCosmeticName() {
+            return this.cosmeticName;
+        }
+
+        public @Nullable List<Long> getSeeds() {
+            return this.seeds;
+        }
+    }
+
+    public enum DragonPerchTimes {
+        FAST("Fast", 30),
+        SPEEDY("Speedy", 45),
+        AVERAGE("Average", 70),
+        SLOW("Slow", 120),
+        ILLUMINA("Illumina", 500);
+
+        private final String cosmeticName;
+        private final int seconds;
+
+        DragonPerchTimes(String cosmeticName, int seconds) {
+            this.cosmeticName = cosmeticName;
+            this.seconds = seconds;
+        }
+
+        public String getCosmeticName() {
+            return this.cosmeticName;
+        }
+
+        public int getSeconds() {
+            return this.seconds;
         }
     }
 }

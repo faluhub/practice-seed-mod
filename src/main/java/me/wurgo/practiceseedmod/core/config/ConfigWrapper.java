@@ -16,6 +16,12 @@ public class ConfigWrapper {
         this.writer.write(config);
     }
 
+    public boolean inverseBoolValue(String key, boolean def) {
+        boolean value = this.getBoolValue(key, def);
+        this.putBoolValue(key, !value);
+        return !value;
+    }
+
     public boolean getBoolValue(String key, boolean def) {
         JsonObject config = this.writer.get();
         JsonElement element = config.get(key);

@@ -18,6 +18,7 @@ import net.fabricmc.loader.api.ModContainer;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.SaveLevelScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.world.GeneratorType;
 import net.minecraft.resource.DataPackSettings;
@@ -50,12 +51,45 @@ public class PracticeSeedMod implements ClientModInitializer {
     public static String seedNotes;
     public static Random barteringRandom;
     public static Random blazeDropRandom;
+    public static int nodeHeight = 73;
+    public static int maximumPerchSeconds;
     public static boolean isRace;
     public static String racePassword;
     public static String raceHost;
 
     public static void log(Object msg) {
         LOGGER.log(Level.INFO, msg);
+    }
+
+    public static void initialiseLevelData(long l) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
+
+        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising barter seed"))));
+        log("Initialising barter seed.");
+        int limit = ConfigPresets.BarterSeedPresets.values().length - 1;
+        int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
+        ConfigPresets.BarterSeedPresets preset = List.of(ConfigPresets.BarterSeedPresets.values()).get(barterSeedPresetIndex);
+        barteringRandom = new Random();
+        if (preset.getSeeds() != null) {
+            barteringRandom.setSeed(preset.getSeeds().get(new Random().nextInt(preset.getSeeds().size() - 1)));
+        }
+
+        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze drop seed"))));
+        log("Initialising blaze drop seed.");
+        int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
+        int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
+        if (kills == -1) {
+            kills = rods + new Random(l).nextInt(6);
+        }
+        blazeDropRandom = new Random(new RandomSeedGenerator().getBlazeDropSeed(rods, kills));
+
+        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising dragon perch"))));
+        log("Initialising dragon perch.");
+        limit = ConfigPresets.DragonPerchTimes.values().length - 1;
+        int index = wrapper.getIntValue("dragonPerchTimeIndex", 0, limit);
+        ConfigPresets.DragonPerchTimes dragonPreset = List.of(ConfigPresets.DragonPerchTimes.values()).get(index);
+        maximumPerchSeconds = dragonPreset.getSeconds();
     }
 
     public static boolean playNextSeed() {
@@ -70,27 +104,6 @@ public class PracticeSeedMod implements ClientModInitializer {
         MinecraftClient client = MinecraftClient.getInstance();
 
         WorldConstants.reset();
-
-        ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
-
-        client.execute(() -> {
-            if (wrapper.getBoolValue("setBarterSeed", true)) {
-                client.method_29970(new SaveLevelScreen(new LiteralText("Initialising barter seed")));
-                int limit = ConfigPresets.BarterSeedPresets.values().length - 1;
-                int barterSeedPresetIndex = wrapper.getIntValue("barterSeedPresetIndex", 0, limit);
-                ConfigPresets.BarterSeedPresets preset = List.of(ConfigPresets.BarterSeedPresets.values()).get(barterSeedPresetIndex);
-                barteringRandom = new Random(preset.seeds.get(new Random().nextInt(preset.seeds.size() - 1)));
-            }
-            if (wrapper.getBoolValue("guaranteeDrops", true)) {
-                client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze drop seed")));
-                int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
-                int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
-                if (kills == -1) {
-                    kills = rods + new Random(l).nextInt(6);
-                }
-                blazeDropRandom = new Random(new RandomSeedGenerator().getBlazeDropSeed(rods, kills));
-            }
-        });
 
         LevelInfo levelInfo = new LevelInfo(
                 "Practice Seed",

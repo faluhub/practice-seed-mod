@@ -4,6 +4,8 @@
   "package": "me.wurgo.practiceseedmod.mixin",
   "compatibilityLevel": "JAVA_16",
   "client": [
+    "gui.suppliers.SplashTextResourceSupplierMixin",
+
     "gui.CreateWorldScreenMixin",
     "gui.DebugHudMixin",
     "gui.GameMenuScreenMixin",
@@ -16,7 +18,11 @@
 
     "mechanics.blocks.GravelBlockMixin",
 
+    "mechanics.dragon.PathNodeMixin",
+    "mechanics.dragon.PhaseManagerMixin",
+
     "mechanics.entities.BlazeEntityMixin",
+    "mechanics.entities.EnderDragonEntityMixin",
     "mechanics.entities.EndermanEntityMixin",
     "mechanics.entities.PiglinBrainMixin"
   ],
