@@ -18,7 +18,7 @@
 
     "mechanics.blocks.GravelBlockMixin",
 
-    "mechanics.dragon.PathNodeMixin",
+    "mechanics.dragon.StrafePlayerPhaseMixin",
     "mechanics.dragon.PhaseManagerMixin",
 
     "mechanics.entities.BlazeEntityMixin",
