@@ -1,9 +1,7 @@
 package me.wurgo.practiceseedmod.mixin.gui;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
-import me.wurgo.practiceseedmod.gui.DownloadUpdateScreen;
 import me.wurgo.practiceseedmod.gui.ModConfigScreen;
-import me.wurgo.practiceseedmod.core.UpdateChecker;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;

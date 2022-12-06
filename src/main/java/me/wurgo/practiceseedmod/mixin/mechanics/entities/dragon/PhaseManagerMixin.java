@@ -1,4 +1,4 @@
-package me.wurgo.practiceseedmod.mixin.mechanics.dragon;
+package me.wurgo.practiceseedmod.mixin.mechanics.entities.dragon;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
 import me.wurgo.practiceseedmod.core.WorldConstants;

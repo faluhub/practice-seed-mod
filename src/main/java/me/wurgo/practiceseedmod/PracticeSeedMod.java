@@ -9,7 +9,6 @@ import io.socket.engineio.client.transports.WebSocket;
 import me.wurgo.practiceseedmod.core.WorldConstants;
 import me.wurgo.practiceseedmod.core.config.ConfigPresets;
 import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import me.wurgo.practiceseedmod.core.RandomSeedGenerator;
 import me.wurgo.practiceseedmod.core.UpdateChecker;
 import net.fabricmc.api.ClientModInitializer;
@@ -36,25 +35,31 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PracticeSeedMod implements ClientModInitializer {
-    public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("practiceseedmod").get();
-    public static final String LOGGER_NAME = MOD_CONTAINER.getMetadata().getName();
-    public static Logger LOGGER = LogManager.getLogger(LOGGER_NAME);
+    public static final ModContainer MOD_CONTAINER = FabricLoader.getInstance().getModContainer("practiceseedmod").orElse(null);
+
+    public static final String LOGGER_NAME = Objects.requireNonNull(MOD_CONTAINER).getMetadata().getName();
+    public static final Logger LOGGER = LogManager.getLogger(LOGGER_NAME);
     public static Socket SOCKET;
-    public static URI SOCKET_URI = URI.create("https://salty-wave-05504.herokuapp.com/");
-    public static UUID uuid;
+    public static final URI SOCKET_URI = URI.create("https://desolate-cove-87183.herokuapp.com");
+
     public static boolean running = false;
-    public static final AtomicBoolean saving = new AtomicBoolean(false);
-    public static List<Long> queue = new ArrayList<>();
-    public static final Object saveLock = new Object();
+    public static UUID uuid;
+    public static final List<Long> queue = new ArrayList<>();
     public static Long currentSeed;
     public static String seedNotes;
-    public static Random barteringRandom;
-    public static Random blazeDropRandom;
-    public static int nodeHeight = 73;
-    public static int maximumPerchSeconds;
-    public static boolean isRace;
+
+    public static boolean isRace = false;
     public static String racePassword;
     public static String raceHost;
+
+    public static final AtomicBoolean saving = new AtomicBoolean(false);
+    public static final Object saveLock = new Object();
+
+    public static Random barteringRandom;
+    public static Random gravelDropRandom;
+    public static Random blazeDropRandom;
+
+    public static int maximumPerchSeconds;
 
     public static void log(Object msg) {
         LOGGER.log(Level.INFO, msg);
@@ -64,7 +69,7 @@ public class PracticeSeedMod implements ClientModInitializer {
         WorldConstants.reset();
 
         MinecraftClient client = MinecraftClient.getInstance();
-        ConfigWrapper wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
+        ConfigWrapper wrapper = new ConfigWrapper();
 
         client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising barter seed"))));
         log("Initialising barter seed.");
@@ -76,14 +81,23 @@ public class PracticeSeedMod implements ClientModInitializer {
             barteringRandom.setSeed(preset.getSeeds().get(new Random().nextInt(preset.getSeeds().size() - 1)));
         }
 
-        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Generating blaze drop seed"))));
+        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising gravel drop seed"))));
+        log("Initialising gravel drop seed.");
+        int flint = wrapper.getIntValue("gravelDropFlint", 1, 10);
+        int gravel = wrapper.getIntValue("gravelDropGravel", 1, 10);
+        if (gravel == -1) {
+            gravel = flint + new Random(l).nextInt(4);
+        }
+        gravelDropRandom = new Random(new RandomSeedGenerator().getSeed(flint, gravel));
+
+        client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising blaze drop seed"))));
         log("Initialising blaze drop seed.");
         int rods = wrapper.getIntValue("blazeDropRods", 6, 16);
         int kills = wrapper.getIntValue("blazeDropKills", 6, 16);
         if (kills == -1) {
             kills = rods + new Random(l).nextInt(6);
         }
-        blazeDropRandom = new Random(new RandomSeedGenerator().getBlazeDropSeed(rods, kills));
+        blazeDropRandom = new Random(new RandomSeedGenerator().getSeed(rods, kills));
 
         client.execute(() -> client.method_29970(new SaveLevelScreen(new LiteralText("Initialising dragon perch"))));
         log("Initialising dragon perch.");

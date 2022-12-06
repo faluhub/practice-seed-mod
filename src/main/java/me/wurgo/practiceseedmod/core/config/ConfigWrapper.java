@@ -5,15 +5,18 @@ import com.google.gson.JsonObject;
 
 public class ConfigWrapper {
     private final ConfigWriter writer;
+    private final JsonObject config;
+    private boolean hasChanged;
 
-    public ConfigWrapper(ConfigWriter writer) {
-        this.writer = writer;
+    public ConfigWrapper() {
+        this.writer = ConfigWriter.INSTANCE;
+        this.config = this.writer.get();
+        this.hasChanged = false;
     }
 
     public void putBoolValue(String key, boolean value) {
-        JsonObject config = this.writer.get();
-        config.addProperty(key, value);
-        this.writer.write(config);
+        this.config.addProperty(key, value);
+        this.hasChanged = true;
     }
 
     public boolean inverseBoolValue(String key, boolean def) {
@@ -23,8 +26,7 @@ public class ConfigWrapper {
     }
 
     public boolean getBoolValue(String key, boolean def) {
-        JsonObject config = this.writer.get();
-        JsonElement element = config.get(key);
+        JsonElement element = this.config.get(key);
         if (element != null) {
             return element.getAsBoolean();
         }
@@ -32,14 +34,12 @@ public class ConfigWrapper {
     }
 
     public void putIntValue(String key, int value) {
-        JsonObject config = this.writer.get();
-        config.addProperty(key, value);
-        this.writer.write(config);
+        this.config.addProperty(key, value);
+        this.hasChanged = true;
     }
 
     public int getIntValue(String key, int def, int limit) {
-        JsonObject config = this.writer.get();
-        JsonElement element = config.get(key);
+        JsonElement element = this.config.get(key);
         if (element != null) {
             int value = element.getAsInt();
             if (value > limit) {
@@ -48,5 +48,11 @@ public class ConfigWrapper {
             return value;
         }
         return def;
+    }
+
+    public void save() {
+        if (this.hasChanged) {
+            this.writer.write(this.config);
+        }
     }
 }

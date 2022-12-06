@@ -18,12 +18,14 @@
 
     "mechanics.blocks.GravelBlockMixin",
 
-    "mechanics.dragon.StrafePlayerPhaseMixin",
-    "mechanics.dragon.PhaseManagerMixin",
+    "mechanics.entities.dragon.EnderDragonFightMixin",
+    "mechanics.entities.dragon.PhaseManagerMixin",
 
     "mechanics.entities.BlazeEntityMixin",
     "mechanics.entities.EnderDragonEntityMixin",
     "mechanics.entities.EndermanEntityMixin",
+    "mechanics.entities.EyeOfEnderEntityMixin",
+    "mechanics.entities.IronGolemEntityMixin",
     "mechanics.entities.PiglinBrainMixin"
   ],
   "injectors": {

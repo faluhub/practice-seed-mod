@@ -1,7 +1,7 @@
 package me.wurgo.practiceseedmod.gui.tabs;
 
+import me.wurgo.practiceseedmod.core.config.ConfigUtils;
 import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import me.wurgo.practiceseedmod.gui.ModConfigScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -13,8 +13,8 @@ import net.minecraft.text.LiteralText;
 public abstract class ConfigTab extends Screen {
     public enum Tabs {
         MISC(MiscConfigTab.class),
-        LOOT(LootConfigTab.class),
-        DRAGON(DragonConfigTab.class);
+        BLOCKS(BlocksConfigTab.class),
+        ENTITIES(EntitiesConfigTab.class);
 
         private final Class<? extends ConfigTab> screen;
 
@@ -44,12 +44,13 @@ public abstract class ConfigTab extends Screen {
     public ConfigTab(String name) {
         super(new LiteralText(name));
 
-        this.wrapper = new ConfigWrapper(ConfigWriter.INSTANCE);
+        this.wrapper = new ConfigWrapper();
         this.client = MinecraftClient.getInstance();
     }
 
     public abstract void addButtons();
 
+    @SuppressWarnings("emptyMethod")
     public void buttonCheck() {}
 
     public String getToggleText(boolean value) {
@@ -58,6 +59,14 @@ public abstract class ConfigTab extends Screen {
 
     public int getButtonAmount() {
         return this.buttons.size();
+    }
+
+    public int compareAB(int a, int b, int limit) {
+        return ConfigUtils.compareAB(a, b, limit);
+    }
+
+    public int compareBA(int b, int a, int limit) {
+        return ConfigUtils.compareBA(b, a, limit);
     }
 
     @Override
@@ -90,6 +99,7 @@ public abstract class ConfigTab extends Screen {
 
     @Override
     public void onClose() {
+        this.wrapper.save();
         this.client.openScreen(new ModConfigScreen());
     }
 }

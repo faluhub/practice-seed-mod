@@ -1,9 +1,6 @@
 package me.wurgo.practiceseedmod.mixin.mechanics.blocks;
 
 import me.wurgo.practiceseedmod.PracticeSeedMod;
-import me.wurgo.practiceseedmod.core.WorldConstants;
-import me.wurgo.practiceseedmod.core.config.ConfigWrapper;
-import me.wurgo.practiceseedmod.core.config.ConfigWriter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.block.GravelBlock;
@@ -20,13 +17,19 @@ public abstract class GravelBlockMixin extends FallingBlock {
         super(settings);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        if (!WorldConstants.hasDroppedFlint && new ConfigWrapper(ConfigWriter.INSTANCE).getBoolValue("firstTryFlint", true)) {
-            WorldConstants.hasDroppedFlint = true;
-            return List.of(new ItemStack(Items.FLINT));
+        List<ItemStack> original = super.getDroppedStacks(state, builder);
+        int amount = 0;
+        if (original.get(0).getItem().equals(Items.FLINT)) {
+            amount = original.get(0).getCount();
+            if (amount != 0) { amount--; }
         }
-
-        return super.getDroppedStacks(state, builder);
+        if (PracticeSeedMod.gravelDropRandom.nextInt(2) == 0) { amount++; }
+        if (amount > 0) {
+            return List.of(new ItemStack(Items.FLINT, amount));
+        }
+        return original;
     }
 }

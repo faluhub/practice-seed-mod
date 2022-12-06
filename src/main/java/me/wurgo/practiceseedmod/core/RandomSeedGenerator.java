@@ -3,26 +3,26 @@ package me.wurgo.practiceseedmod.core;
 import java.util.Random;
 
 public class RandomSeedGenerator {
-    private int getBlazeRods(long seed, int kills) {
+    private int getPassesForIterations(long seed, int iterations) {
         Random random = new Random(seed);
-        int rods = 0;
-        for (int i = 0; i < kills; i++) {
+        int passes = 0;
+        for (int i = 0; i < iterations; i++) {
             if (random.nextInt(2) == 0) {
-                rods++;
+                passes++;
             }
         }
-        return rods;
+        return passes;
     }
 
-    private boolean hasEnoughRods(long seed, int rods, int kills) {
-        return this.getBlazeRods(seed, kills) == rods;
+    private boolean hasEnoughPasses(long seed, int requiredPasses, int iterations) {
+        return this.getPassesForIterations(seed, iterations) == requiredPasses;
     }
 
-    public long getBlazeDropSeed(int rods, int kills) {
+    public long getSeed(int requiredPasses, int iterations) {
         Random random = new Random();
         while (true) {
             long seed = random.nextLong();
-            if (this.hasEnoughRods(seed, rods, kills)) {
+            if (this.hasEnoughPasses(seed, requiredPasses, iterations)) {
                 return seed;
             }
         }

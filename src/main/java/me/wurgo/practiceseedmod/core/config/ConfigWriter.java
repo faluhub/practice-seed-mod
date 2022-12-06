@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ConfigWriter {
-    public static ConfigWriter INSTANCE = new ConfigWriter("config");
+    public static final ConfigWriter INSTANCE = new ConfigWriter("config");
 
     private final File file;
 

@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.time.Instant;
 
 public class WorldConstants {
-    public static boolean hasDroppedFlint = false;
     public static boolean hasPerched = false;
     public static Instant endEnterTimestamp;
 

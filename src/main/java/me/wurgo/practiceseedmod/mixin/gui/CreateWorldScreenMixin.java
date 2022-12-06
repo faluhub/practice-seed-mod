@@ -13,9 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CreateWorldScreen.class)
 public abstract class CreateWorldScreenMixin {
     @Shadow protected abstract void createLevel();
-
     @Shadow @Final public MoreOptionsDialog moreOptionsDialog;
-
     @Shadow public boolean hardcore;
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -25,8 +23,8 @@ public abstract class CreateWorldScreenMixin {
         }
     }
 
-    @Inject(method = "createLevel", at = @At("TAIL"))
+    @Inject(method = "createLevel", at = @At("HEAD"))
     private void initLevelData(CallbackInfo ci) {
-        PracticeSeedMod.initialiseLevelData(moreOptionsDialog.getGeneratorOptions(this.hardcore).getSeed());
+        PracticeSeedMod.initialiseLevelData(this.moreOptionsDialog.getGeneratorOptions(this.hardcore).getSeed());
     }
 }

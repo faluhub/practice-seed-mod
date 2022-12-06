@@ -18,6 +18,18 @@ public class MiscConfigTab extends ConfigTab {
                         this.height / 4,
                         this.btnWidth,
                         this.btnHeight,
+                        new LiteralText("Eye Breaks: " + this.getToggleText(this.wrapper.getBoolValue("eyeBreaks", false))),
+                        b -> b.setMessage(new LiteralText("Eye Breaks: " + this.getToggleText(this.wrapper.inverseBoolValue("eyeBreaks", false)))),
+                        (b, matrices, i, j) -> this.renderTooltip(matrices, new LiteralText("Toggles if an Eye of Ender is guaranteed to drop."), i, j)
+                )
+        );
+
+        this.addButton(
+                new ButtonWidget(
+                        this.width / 2 - this.btnWidth / 2,
+                        this.height / 4 + this.spacingY * 2,
+                        this.btnWidth,
+                        this.btnHeight,
                         new LiteralText("Copy UUID"),
                         b -> this.client.openScreen(new LinkUUIDScreen(this)),
                         (b, matrices, i, j) -> this.renderTooltip(
@@ -28,10 +40,11 @@ public class MiscConfigTab extends ConfigTab {
                         )
                 )
         );
+
         this.addButton(
                 new ButtonWidget(
                         this.width / 2 - this.btnWidth / 2,
-                        this.height / 4 + this.spacingY,
+                        this.height / 4 + this.spacingY * 3,
                         this.btnWidth,
                         this.btnHeight,
                         new LiteralText("Reset World Constants"),
@@ -47,5 +60,10 @@ public class MiscConfigTab extends ConfigTab {
                         )
                 )
         );
+    }
+
+    @Override
+    public int getButtonAmount() {
+        return super.getButtonAmount() + 1;
     }
 }
