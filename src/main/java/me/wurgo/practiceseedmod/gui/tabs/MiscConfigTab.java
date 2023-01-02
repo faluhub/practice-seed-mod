@@ -18,8 +18,8 @@ public class MiscConfigTab extends ConfigTab {
                         this.height / 4,
                         this.btnWidth,
                         this.btnHeight,
-                        new LiteralText("Eye Breaks: " + this.getToggleText(this.wrapper.getBoolValue("eyeBreaks", false))),
-                        b -> b.setMessage(new LiteralText("Eye Breaks: " + this.getToggleText(this.wrapper.inverseBoolValue("eyeBreaks", false)))),
+                        new LiteralText("Always Eye Drops: " + this.getToggleText(this.wrapper.getBoolValue("eyeDrops", true))),
+                        b -> b.setMessage(new LiteralText("Always Eye Drops: " + this.getToggleText(this.wrapper.inverseBoolValue("eyeDrops", true)))),
                         (b, matrices, i, j) -> this.renderTooltip(matrices, new LiteralText("Toggles if an Eye of Ender is guaranteed to drop."), i, j)
                 )
         );

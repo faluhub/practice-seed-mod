@@ -15,8 +15,8 @@ public class EyeOfEnderEntityMixin {
 
     @Inject(method = "moveTowards", at = @At("TAIL"))
     private void breakEye(BlockPos pos, CallbackInfo ci) {
-        if (!new ConfigWrapper().getBoolValue("eyeBreaks", false)) {
-            this.dropsItem = false;
+        if (new ConfigWrapper().getBoolValue("eyeDrops", true)) {
+            this.dropsItem = true;
         }
     }
 }
