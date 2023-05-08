@@ -6,13 +6,13 @@
   "description": "EvanKae lol",
   "authors": ["Wurgo"],
   "contact": {
-    "homepage": "https://github.com/wurgo"
+    "homepage": "https://github.com/QuesiaSR"
   },
   "license": "MIT",
   "icon": "assets/practiceseedmod/icon.png",
   "environment": "client",
   "entrypoints": {
-    "client": ["me.wurgo.practiceseedmod.PracticeSeedMod"]
+    "client": ["me.quesia.practiceseedmod.PracticeSeedMod"]
   },
   "mixins": ["practiceseedmod.mixins.json"],
   "depends": {
