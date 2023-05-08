@@ -1,3 +1,11 @@
 package me.quesia.practiceseedmod.core;
 
-public record Seed(long seed, String notes) {}
+public class Seed {
+    public final long seed;
+    public final String notes;
+
+    public Seed(long seed, String notes) {
+        this.seed = seed;
+        this.notes = notes;
+    }
+}

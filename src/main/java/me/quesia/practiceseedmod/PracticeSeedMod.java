@@ -130,7 +130,7 @@ public class PracticeSeedMod implements ClientModInitializer {
         RegistryTracker.Modifiable registryTracker = RegistryTracker.create();
         GeneratorOptions generatorOptions = GeneratorType.DEFAULT.method_29077(
                 registryTracker,
-                l.seed(),
+                l.seed,
                 true,
                 false
         );

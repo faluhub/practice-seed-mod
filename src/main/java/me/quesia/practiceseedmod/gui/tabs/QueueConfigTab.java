@@ -161,9 +161,9 @@ public class QueueConfigTab extends ConfigTab {
 
             @Override
             public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-                QueueConfigTab.this.textRenderer.drawWithShadow(matrices, String.valueOf(this.seed.seed()), QueueConfigTab.this.width / 2.0F - QueueConfigTab.this.textRenderer.getWidth(String.valueOf(this.seed.seed())) / 2.0F, y + 1, 0xFFFFFF, false);
+                QueueConfigTab.this.textRenderer.drawWithShadow(matrices, String.valueOf(this.seed.seed), QueueConfigTab.this.width / 2.0F - QueueConfigTab.this.textRenderer.getWidth(String.valueOf(this.seed.seed)) / 2.0F, y + 1, 0xFFFFFF, false);
                 if (hovered) {
-                    QueueConfigTab.this.renderTooltip(matrices, QueueConfigTab.this.textRenderer.wrapLines(new LiteralText(this.seed.notes()), 250), mouseX, mouseY);
+                    QueueConfigTab.this.renderTooltip(matrices, QueueConfigTab.this.textRenderer.wrapLines(new LiteralText(this.seed.notes), 250), mouseX, mouseY);
                 }
             }
 
