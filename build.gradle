@@ -19,15 +19,6 @@ repositories {
 	// for more information about repositories.
 }
 
-configurations {
-	modIncludeImplementation
-
-	implementation.extendsFrom shadow
-	include.extendsFrom modIncludeImplementation
-	modImplementation.extendsFrom modIncludeImplementation
-	implementation.extendsFrom shadow
-}
-
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
@@ -35,7 +26,7 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-	modIncludeImplementation "io.socket:socket.io-client:2.1.0"
+	shadow implementation("io.socket:socket.io-client:2.1.0")
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

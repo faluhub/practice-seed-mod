@@ -18,9 +18,8 @@ public class DebugHudMixin {
             list.add("");
             if (PracticeSeedMod.IS_RACE) {
                 list.add("Race hosted by " + PracticeSeedMod.RACE_HOST);
-                list.add("Racing on seed '" + PracticeSeedMod.CURRENT_SEED + "'");
             } else {
-                list.add("Practicing on seed '" + PracticeSeedMod.CURRENT_SEED + "'");
+                list.add("Practicing on seed '" + PracticeSeedMod.CURRENT_SEED.seed + "'");
             }
             cir.setReturnValue(list);
         }

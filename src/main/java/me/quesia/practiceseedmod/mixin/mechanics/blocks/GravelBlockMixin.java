@@ -21,15 +21,17 @@ public abstract class GravelBlockMixin extends FallingBlock {
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
         List<ItemStack> original = super.getDroppedStacks(state, builder);
-        int amount = 0;
-        if (original.get(0).getItem().equals(Items.FLINT)) {
-            amount = original.get(0).getCount();
-            if (amount != 0) { amount--; }
-        }
-        if (PracticeSeedMod.GRAVEL_DROP_RANDOM.nextInt(2) == 0) { amount++; }
-        if (amount > 0) {
-            return List.of(new ItemStack(Items.FLINT, amount));
-        }
+        try {
+            int amount = 0;
+            if (original.get(0).getItem().equals(Items.FLINT)) {
+                amount = original.get(0).getCount();
+                if (amount != 0) { amount--; }
+            }
+            if (PracticeSeedMod.GRAVEL_DROP_RANDOM.nextInt(2) == 0) { amount++; }
+            if (amount > 0) {
+                return List.of(new ItemStack(Items.FLINT, amount));
+            }
+        } catch (IndexOutOfBoundsException ignored) {}
         return original;
     }
 }
